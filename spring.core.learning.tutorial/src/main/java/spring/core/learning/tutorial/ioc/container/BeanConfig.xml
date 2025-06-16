@@ -1,0 +1,74 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean class="spring.core.learning.tutorial.pojo.Student"
+		id="firstStudent">
+		<constructor-arg value="Sajjad Pathan" name="name"></constructor-arg>
+		<constructor-arg value="Sajjad@gmail.com" name="email"></constructor-arg>
+	</bean>
+	
+	<bean class="spring.core.learning.tutorial.pojo.Student"
+		id="secondStudent">
+		<constructor-arg value=" Pathan" name="name"></constructor-arg>
+		<constructor-arg value="Sajjadpathan@gmail.com" name="email"></constructor-arg>
+	</bean>
+	
+	<bean class="spring.core.learning.tutorial.pojo.Student"
+		id="thirdStudent" depends-on="thirdStudentAdd">
+		<constructor-arg value=" Pathan" name="name"></constructor-arg>
+		<constructor-arg value="Sajjadpathan@gmail.com" name="email"></constructor-arg>
+		<constructor-arg ref="thirdStudentAdd" name="address"></constructor-arg>
+	</bean>
+	
+	<bean class="spring.core.learning.tutorial.pojo.Student"
+		id="autoStudent" depends-on="thirdStudentAdd">
+		<constructor-arg value=" Pathan" name="name"></constructor-arg>
+		<constructor-arg value="Sajjadpathan@gmail.com" name="email"></constructor-arg>
+		<constructor-arg ref="autowireCandidate" name="address"></constructor-arg>
+	</bean>
+	
+		<bean class="spring.core.learning.tutorial.pojo.StudentAddress"
+		id="autowireCandidate" autowire-candidate="true" lazy-init="true"/>	
+	
+	<bean class="spring.core.learning.tutorial.pojo.StudentAddress"
+		id="thirdStudentAdd">
+		<constructor-arg value=" Rameshwar" name="streetName"></constructor-arg>
+		<constructor-arg value="Latur" name="city"></constructor-arg>
+		<constructor-arg value="Maharashtra" name="state"></constructor-arg>
+	</bean>
+	
+	<bean name="bySetter" id="bySetter" class="spring.core.learning.tutorial.pojo.Student" lazy-init="true">
+	<property name="name" value="John Wick"></property>
+	<property name="email" value="john@yahoo.com"></property>
+	<property name="address" ref="thirdStudentAdd"></property>
+	</bean>
+	<alias name="firstStudent" alias="toName"/>
+	
+	
+	
+	
+	
+	<bean name="MyNorth" class="spring.core.learning.tutorial.pojo.StudentAddress">
+	<property name="list">
+		<list>
+		<value>Eddard</value>
+		<value>Aarya</value>
+		<value>John</value>
+		<value>Brandon</value>
+		</list>
+	</property>
+	</bean>
+	
+	
+	
+	
+	<bean class="spring.core.learning.tutorial.pojo.StudentAddress"
+		id="singletonBean" name="singletonBean" scope="singleton"></bean>
+		
+		<bean class="spring.core.learning.tutorial.pojo.StudentAddress"
+		id="prototypeBean" name="prototypeBean" scope="prototype"></bean>
+		
+	<bean id="myBean" name="myBean" class="spring.core.learning.tutorial.pojo.StudentAddress" scope="request"/>
+</beans> 
