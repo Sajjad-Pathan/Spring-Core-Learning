@@ -1,0 +1,103 @@
+Transaction Management: Provide consistent model to use diffrent ways for transaction.
+						A consistent programming model across different transaction APIs,
+						such as Java Transaction API (JTA), JDBC, Hibernate, and the Java Persistence API (JPA).
+				By using Spring Transaction Management we dont need to change code just change the configuration according to the Manager
+				
+				
+															+-----------------------+
+														| Application Code      |
+														|  (@Transactional)     |
+														+----------+------------+
+														           |
+														           v
+														+----------+------------+
+														| TransactionManager    | ← controls commit/rollback
+														+----------+------------+
+														           |
+														           v
+														+----------+------------+
+														| DataSource            | ← provides pooled connections
+														+----------+------------+
+														           |
+														           v
+														+----------+------------+
+														| JDBC Driver / Hibernate |
+														+----------+------------+
+														           |
+														           v
+														+----------+------------+
+														| Database              |
+														+-----------------------+
+				
+				
+	
+	DataSourceTransactionManager And PlatformTransactionManager: is the main interface which is manage transactions from start to end.
+				PlatformTransactionManager Group multiple database operations into a single unit of work And Automatically commit changes if everything goes well.	
+				PlatformTransactionManager is the top interface and HibernateTransactionManager, DataSourceTransactionManager are the implementation classes 
+				of PlatformTransactionManager. 
+				we have seen the example of PlatformTransactionManager in love2code.platform.transaction.manager package where using implementation 
+				of PlatformTransactionManager class DriverManagerDataSource used to manage jdbc transaction
+				
+		  JdbcTemplate And JPATemplate Represent high-level approach , in this approach we dont manage or access these API
+		  these are responsible for auto database connection, exception handling, logs and more
+		  
+		  DataSourceUtils (for JDBC), EntityManagerFactoryUtils SessionFactoryUtils these classes represent low-level data access approach 
+		  with these classes we manually need to provide configuration for connection,exception we can say that using these classes we have 
+		  access to manage API according to our need
+	EntityManagerFactoryUtils: The EntityManagerFactoryUtils class in Spring is used to manually access an EntityManager from an EntityManagerFactory, 
+		  with Spring transaction awareness.
+		  
+		  
+	HibernateTransactionManager: 
+	
+Data Access with JDBC: spring provide various approach to communicate with database these approaches have already define template for connection
+					   ,Statement Creation, Query Exeqution and exception handling.
+					   we need to provide metadata to to these template by using DataSourse object containing info of database credentials
+					   Spring provide JdbcTemplate, NamedParameterJdbcTemplate, SimpleJdbcInsert, SimpleJdbcCall templates to communicate with database
+					   we  execute(…​), update(…​), and findObject(…​) SqlUpdate() these kinds of methods to perform database transaction
+					 
+		Package Hierarchy :core: The org.springframework.jdbc.core package contains the JdbcTemplate class and its various callback interfaces, plus a variety of related classes. 
+					  		A subpackage named org.springframework.jdbc.core.simple contains the SimpleJdbcInsert and SimpleJdbcCall classes. 
+					   		Another subpackage named org.springframework.jdbc.core.namedparam contains the NamedParameterJdbcTemplate class and the related support classes.
+		
+	JdbcTemplate: we have seen the example of JdbcTemplate in JdbcTemplateApp class and we observe that JdbcTemplate create automatic connection,statement,
+		 connection close, execution and exception handling. i.e we dont need to do these things explicitly and no more repetative code 
+		 JdbcTemplat take the DataSourse object as a parameter and use to create DB transaction.
+		 
+		 DataSourse:
+				Using DataSource
+				Using DataSourceUtils
+				Implementing SmartDataSource
+				Extending AbstractDataSource
+				Using SingleConnectionDataSource
+				Using DriverManagerDataSource
+				Using TransactionAwareDataSourceProxy
+				Using DataSourceTransactionManager / JdbcTransactionManager		
+		
+	Simplifying JDBC Operations with the SimpleJdbc Classes: 
+					*SimpleJdbcInsert: this class used to store data into a table without using query, it automatic generate sql query by using
+					keys of Map Collection we provided and make sure key matches the actual name of table column to a key
+					we specify table name while creating the object of SimpleJdbcInsert using  withTableName() method 
+					
+					
+Object Relational Mapping (ORM) Data Access
+
+			Section Summary
+				Introduction to ORM with Spring: ORM (Object-Relational Mapping) allows Java objects to be stored and retrieved from a relational database easily.
+				The Spring Framework makes working with ORM tools like Hibernate or JPA easier by handling configuration,
+				transactions, exceptions, and resource management.
+				benefits of using the Spring Framework to create your ORM DAOs include:Easier testing.Common data access exceptions, General resource management
+				Integrated transaction management
+				
+				
+				General ORM Integration Considerations:
+								The major goal of Spring’s ORM integration is clear application layering and for loose coupling of application objects
+			
+				JPA: We have seen the example of jpa in EntityManagerFactoryUtilsApp using EntityManager we make transactions
+				
+				
+				4. Difference Between Hibernate and JPA
+				Hibernate is an implementation of JPA.
+				Spring allows you to:
+				Work directly with Hibernate API (Session, Transaction) OR
+				Use JPA abstraction (EntityManager) with Hibernate as the provider.
